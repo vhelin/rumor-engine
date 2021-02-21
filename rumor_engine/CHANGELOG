@@ -1,0 +1,18 @@
+
+v2.3 (25-Dec-2005) * added support for descriptive rumors.
+                   * code cleanups.
+
+v2.2 (18-Dec-2003) * code and structure cleanups.
+                   * simplified person.h, embedded the race
+                     information into the rumors.
+
+v2.1 (24-Aug-2003) * updated the sources to reflect the
+                     changes in the documents.
+
+v2.0 (29-Jul-2003) * separated the rumors into two subclasses:
+                     rumors that tell about places and items,
+                     and rumors about the rest.
+
+v1.1 (28-Jul-2003) * small fixes, another demo
+
+v1.0 (??-Dec-2002) * initial release

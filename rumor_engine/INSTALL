@@ -1,0 +1,35 @@
+
+THE EASY WAY
+
+just type "make" in the root dir.
+
+
+THE HARD WAY
+
+1. go to folder "rumor" and compile the common objects:
+
+cd rumor
+make
+cd ..
+
+2. go to demo folders "demo1", "demo2" and "demo3" and compile the demos:
+
+cd demo1
+make
+cd ..
+cd demo2
+make
+cd ..
+cd demo3
+make
+cd..
+
+
+NOTE!
+
+if you get errors when running "make" try the next exports before
+reissuing "make":
+
+export LD=gcc
+export CC=gcc
+

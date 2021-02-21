@@ -1,0 +1,42 @@
+
+items:
+* organic
+* organic-grilled
+* fire
+* hard
+* sharp
+* self
+
+actions:
+* hit
+* throw
+* use
+* give
+* tell (rumor)
+
+self:
+* squeeze
+* eat
+* taste
+* sniff
+* touch
+* kiss
+
+result:
+* nutrition
+* pleasure
+* hp
+* gold
+* items
+* karma
+
+rules:
+* hard + hit/throw + organic
+   ^make-damage
+* sharp + hit/throw + organic
+   ^make-damage
+* self + eat + organic
+   ^destroy & take-nutrition
+* self + eat + organic-grilled
+   ^destroy & take-nutrition
+

@@ -1,0 +1,69 @@
+
+-----------------------------------------------------------------------------
+-                         the rumor engine demo                             -
+-           written by ville helin <vhelin#iki.fi> in 2002-2005             -
+-----------------------------------------------------------------------------
+
+this is LGPL software. please read the file LICENSE for further instructions.
+
+
+1. INTRODUCTION
+
+this small program demonstrates the rumor engine of
+project lecherous gnomes. more information about the
+rumor engine can be found at http://www.iki.fi/~vhelin/tc.html
+and in the file ARCHITECTURE.
+
+
+2. DEMOS
+
+demo1:
+
+see the creatures hunt for food. one the them sees a
+treasure and tells the others about it. unfortunately
+the treasure vanishes after it has been seen. see what
+happens when one of the creatures spreads a false rumor.
+
+demo2:
+
+there is a pond of water on the map. eventually the
+rumors about the pond spread to everyone and they
+go check it out.
+
+demo3:
+
+unfinished.
+
+
+3. KEYS
+
+demo1 & demo2:
+
+press enter to advance to the next frame. to quit type q and
+press enter.
+
+demo3:
+
+, - pick up
+o - operate
+Q - quit
+
+and cursor keys to move.
+
+
+4. NOTE
+
+and have a large shell window. otherwise you will miss some of
+the action.
+
+
+5. CONTACT
+
+if you have any questions, feel free to contact me at
+vhelin#iki.fi.
+
+
+6. LEGAL STUFF
+ 
+this software is under LGPL, and you use it at your risk. i take no
+responsibility for anything.
