@@ -95,124 +95,124 @@ int map_look(struct level *l, struct map *m, struct ai *a, int r) {
       dx = a->mx - x;
       dy = a->my - y;
       if (dx*dx + dy*dy > r*r)
-	continue;
+        continue;
 
       /* copy the tile */
       m->tiles[y*m->dx + x] = l->tiles[y*l->dx + x];
 
       /* handle the items */
       if (l->items[y*l->dx + x] == NULL) {
-	if (m->items[y*m->dx + x] != NULL) {
-	  /* free the lost items */
-	  mi = m->items[y*m->dx + x];
-	  while (mi != NULL) {
-	    mt = mi->next;
-	    free(mi);
-	    mi = mt;
-	  }
-	  m->items[y*m->dx + x] = NULL;
-	}
+        if (m->items[y*m->dx + x] != NULL) {
+          /* free the lost items */
+          mi = m->items[y*m->dx + x];
+          while (mi != NULL) {
+            mt = mi->next;
+            free(mi);
+            mi = mt;
+          }
+          m->items[y*m->dx + x] = NULL;
+        }
       }
       else {
-	it = l->items[y*l->dx + x];
-	if (m->items[y*m->dx + x] != NULL) {
-	  /* do the items match? */
-	  mi = m->items[y*m->dx + x];
-	  while (mi != NULL) {
-	    if (it->type != mi->type)
-	      break;
-	    mi = mi->next;
-	    it = it->next;
-	  }
+        it = l->items[y*l->dx + x];
+        if (m->items[y*m->dx + x] != NULL) {
+          /* do the items match? */
+          mi = m->items[y*m->dx + x];
+          while (mi != NULL) {
+            if (it->type != mi->type)
+              break;
+            mi = mi->next;
+            it = it->next;
+          }
 
-	  if (mi != NULL || it != NULL) {
-	    /* no match -> free the old ones */
-	    mi = m->items[y*m->dx + x];
-	    while (mi != NULL) {
-	      mt = mi->next;
-	      free(mi);
-	      mi = mt;
-	    }
-	    m->items[y*m->dx + x] = NULL;
-	    it = l->items[y*l->dx + x];
-	  }
-	}
+          if (mi != NULL || it != NULL) {
+            /* no match -> free the old ones */
+            mi = m->items[y*m->dx + x];
+            while (mi != NULL) {
+              mt = mi->next;
+              free(mi);
+              mi = mt;
+            }
+            m->items[y*m->dx + x] = NULL;
+            it = l->items[y*l->dx + x];
+          }
+        }
 
-	/* it != NULL -> copy the items */
-	mp = &(m->items[y*m->dx + x]);
-	*mp = NULL;
-	while (it != NULL) {
-	  mi = malloc(sizeof(struct map_item));
-	  if (mi == NULL) {
-	    fprintf(stderr, "MAP_LOOK: Out of memory error.\n");
-	    return FAILED;
-	  }
-	  mi->type = it->type;
-	  it = it->next;
-	  if (*mp != NULL)
-	    (*mp)->next = mi;
-	  mi->prev = *mp;
-	  mi->next = NULL;
-	  *mp = mi;
-	  mp = &(mi->next);
-	}
+        /* it != NULL -> copy the items */
+        mp = &(m->items[y*m->dx + x]);
+        *mp = NULL;
+        while (it != NULL) {
+          mi = malloc(sizeof(struct map_item));
+          if (mi == NULL) {
+            fprintf(stderr, "MAP_LOOK: Out of memory error.\n");
+            return FAILED;
+          }
+          mi->type = it->type;
+          it = it->next;
+          if (*mp != NULL)
+            (*mp)->next = mi;
+          mi->prev = *mp;
+          mi->next = NULL;
+          *mp = mi;
+          mp = &(mi->next);
+        }
       }
 
       /* handle the ai bots */
       if (l->bots[y*l->dx + x] == NULL) {
-	if (m->bots[y*m->dx + x] != NULL) {
-	  free(m->bots[y*m->dx + x]);
-	  m->bots[y*m->dx + x] = NULL;
-	}
+        if (m->bots[y*m->dx + x] != NULL) {
+          free(m->bots[y*m->dx + x]);
+          m->bots[y*m->dx + x] = NULL;
+        }
       }
       else {
-	at = l->bots[y*l->dx + x];
-	if (m->bots[y*m->dx + x] != NULL) {
-	  am = m->bots[y*m->dx + x];
-	  if (am->race != at->mem.self->race || am->id != at->mem.self->id) {
-	    /* bots differ -> free the old memory */
-	    free(m->bots[y*m->dx + x]);
-	    m->bots[y*m->dx + x] = NULL;
-	  }
-	}
+        at = l->bots[y*l->dx + x];
+        if (m->bots[y*m->dx + x] != NULL) {
+          am = m->bots[y*m->dx + x];
+          if (am->race != at->mem.self->race || am->id != at->mem.self->id) {
+            /* bots differ -> free the old memory */
+            free(m->bots[y*m->dx + x]);
+            m->bots[y*m->dx + x] = NULL;
+          }
+        }
 
-	if (m->bots[y*m->dx + x] == NULL) {
-	  /* remember the new visual */
-	  am = malloc(sizeof(struct map_ai));
-	  if (am == NULL) {
-	    fprintf(stderr, "MAP_LOOK: Out of memory error.\n");
-	    return FAILED;
-	  }
-	  am->id = at->mem.self->id;
-	  am->race = at->mem.self->race;
-	  m->bots[y*m->dx + x] = am;
-	}
+        if (m->bots[y*m->dx + x] == NULL) {
+          /* remember the new visual */
+          am = malloc(sizeof(struct map_ai));
+          if (am == NULL) {
+            fprintf(stderr, "MAP_LOOK: Out of memory error.\n");
+            return FAILED;
+          }
+          am->id = at->mem.self->id;
+          am->race = at->mem.self->race;
+          m->bots[y*m->dx + x] = am;
+        }
       }
     }
   }
 
   /* DEBUG
-  {
-    FILE *f;
-    char tmp[256];
+     {
+     FILE *f;
+     char tmp[256];
 
-    sprintf(tmp, "memory_%d.txt", (int)a);
-    f = fopen(tmp, "wb");
-    for (y = 0; y < m->dy; y++) {
-      for (x = 0; x < m->dx; x++) {
-	if (m->bots[y*m->dx + x] != NULL)
-	  fprintf(f, "@");
-	else if (m->items[y*m->dx + x] != NULL)
-	  fprintf(f, "?");
-	else if (m->tiles[y*m->dx + x] != 0)
-	  fprintf(f, "%c", m->tiles[y*m->dx + x]);
-	else
-	  fprintf(f, " ");
-      }
-      fprintf(f, "\n");
-    }
-    fclose(f);
-  }
+     sprintf(tmp, "memory_%d.txt", (int)a);
+     f = fopen(tmp, "wb");
+     for (y = 0; y < m->dy; y++) {
+     for (x = 0; x < m->dx; x++) {
+     if (m->bots[y*m->dx + x] != NULL)
+     fprintf(f, "@");
+     else if (m->items[y*m->dx + x] != NULL)
+     fprintf(f, "?");
+     else if (m->tiles[y*m->dx + x] != 0)
+     fprintf(f, "%c", m->tiles[y*m->dx + x]);
+     else
+     fprintf(f, " ");
+     }
+     fprintf(f, "\n");
+     }
+     fclose(f);
+     }
   */
 
   return SUCCEEDED;

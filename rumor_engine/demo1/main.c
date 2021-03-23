@@ -61,16 +61,16 @@ int main(int argc, char *argv[]) {
       i = 0;
       c = 0;
       while (1) {
-	c++;
-	if (c == 70)
-	  break;
-	x = rand() % playfield_x;
-	y = rand() % playfield_y;
-	x = y*playfield_x + x;
-	if (playfield[x] == '.') {
-	  playfield[x] = 'f';
-	  break;
-	}
+        c++;
+        if (c == 70)
+          break;
+        x = rand() % playfield_x;
+        y = rand() % playfield_y;
+        x = y*playfield_x + x;
+        if (playfield[x] == '.') {
+          playfield[x] = 'f';
+          break;
+        }
       }
     }
 
@@ -92,29 +92,29 @@ int gold_announce(void) {
   for (y = 0; y < playfield_y; y++) {
     for (x = 0; x < playfield_x; x++) {
       if (playfield[y*playfield_x + x] == '$') {
-	for (i = 0; i < CREATURES; i++) {
-	  e = creatures[i].x - x;
-	  f = creatures[i].y - y;
-	  e = sqrt(e*e + f*f);
-	  if (e < 3) {
-	    tmp.id = i;
-	    tmp.race = creatures[i].mem.self->race;
-	    r = rumor_create_experience(&tmp);
-	    r->subject.id = i;
-	    r->subject.race = tmp.race;
-	    r->object.id = i;
-	    r->object.race = tmp.race;
-	    r->action = ACTION_SAW_TREASURE;
-	    r->priority = actions[r->action].priority;
-	    r->x = x;
-	    r->y = y;
-	    r->timer = 100;
-	    rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
+        for (i = 0; i < CREATURES; i++) {
+          e = creatures[i].x - x;
+          f = creatures[i].y - y;
+          e = sqrt(e*e + f*f);
+          if (e < 3) {
+            tmp.id = i;
+            tmp.race = creatures[i].mem.self->race;
+            r = rumor_create_experience(&tmp);
+            r->subject.id = i;
+            r->subject.race = tmp.race;
+            r->object.id = i;
+            r->object.race = tmp.race;
+            r->action = ACTION_SAW_TREASURE;
+            r->priority = actions[r->action].priority;
+            r->x = x;
+            r->y = y;
+            r->timer = 100;
+            rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
 
-	    i = CREATURES;
-	    playfield[y*playfield_x + x] = '.';
-	  }
-	}
+            i = CREATURES;
+            playfield[y*playfield_x + x] = '.';
+          }
+        }
       }
     }
   }
@@ -156,7 +156,7 @@ int init_creatures(void) {
       creatures[i].y = (int)(rand()/(double)RAND_MAX*playfield_y);
       z = creatures[i].y*playfield_x + creatures[i].x;
       if (output_buffer[z] == '.')
-	break;
+        break;
     }
 
     output_buffer[z] = 'D';
@@ -174,15 +174,15 @@ int init_creatures(void) {
     creatures[i].mem.self = p;
     p->respect = 1.0;
     /*
-    if (i != 1) {
+      if (i != 1) {
       person_create_and_add(&creatures[i].mem.person_list, 1, &p);
       p->respect = 0.8;
-    }
-    if (i != 0) {
+      }
+      if (i != 0) {
       person_create_and_add(&creatures[i].mem.person_list, 0, &p);
       p->respect = 0.69;
-    }
-    if (i == 0) {
+      }
+      if (i == 0) {
       struct rumor *r;
       r = rumor_create();
       r->priority = 1.0;
@@ -197,7 +197,7 @@ int init_creatures(void) {
       r->y = 0;
       r->next = NULL;
       rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
-    }
+      }
     */
   }
   return SUCCEEDED;
@@ -277,30 +277,30 @@ int move_creatures(void) {
     /* idling? */
     if (creatures[i].state == CSTATE_IDLE) {
       if ((rand() % 7) == 0)
-	new_state(&creatures[i].state, i);
+        new_state(&creatures[i].state, i);
     }
     /* hitting? */
     else if (creatures[i].state == CSTATE_HIT) {
       q = 0;
       l = 10000;
       for (d = 0; d < CREATURES; d++) {
-	if (d == i)
-	  continue;
-	e = creatures[i].x - creatures[d].x;
-	f = creatures[i].y - creatures[d].y;
-	e = sqrt(e*e + f*f);
-	if (e < l) {
-	  l = e;
-	  q = d;
-	}
+        if (d == i)
+          continue;
+        e = creatures[i].x - creatures[d].x;
+        f = creatures[i].y - creatures[d].y;
+        e = sqrt(e*e + f*f);
+        if (e < l) {
+          l = e;
+          q = d;
+        }
       }
 
       m = creatures[q].x - creatures[i].x;
       n = creatures[q].y - creatures[i].y;
 
       if (abs(n)+abs(m) == 1) {
-	rumor_generate(&creatures[i], &creatures[q], ACTION_HIT);
-	new_state(&creatures[i].state, i);
+        rumor_generate(&creatures[i], &creatures[q], ACTION_HIT);
+        new_state(&creatures[i].state, i);
       }
 
       new_state(&creatures[i].state, i);
@@ -313,45 +313,45 @@ int move_creatures(void) {
 
       r = creatures[i].mem.experience_list;
       while (r != NULL) {
-	if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
-	  break;
-	r = r->next;
+        if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
+          break;
+        r = r->next;
       }
       if (r == NULL) {
-	r = creatures[i].mem.rumor_list;
-	while (r != NULL) {
-	  if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
-	    break;
-	  r = r->next;
-	}
+        r = creatures[i].mem.rumor_list;
+        while (r != NULL) {
+          if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
+            break;
+          r = r->next;
+        }
       }
 
       /* can i see the treasure? */
       d = 0;
       if (r != NULL) {
-	for (p = 0; p < playfield_y; p++) {
-	  for (q = 0; q < playfield_x; q++) {
-	    if (playfield[p*playfield_x + q] == '$') {
-	      m = q - creatures[i].x;
-	      n = p - creatures[i].y;
-	      if (sqrt(m*m + n*n) < 2) {
-		d = 1;
-		p = playfield_y;
-		q = playfield_x;
-	      }
-	    }
-	  }
-	}
+        for (p = 0; p < playfield_y; p++) {
+          for (q = 0; q < playfield_x; q++) {
+            if (playfield[p*playfield_x + q] == '$') {
+              m = q - creatures[i].x;
+              n = p - creatures[i].y;
+              if (sqrt(m*m + n*n) < 2) {
+                d = 1;
+                p = playfield_y;
+                q = playfield_x;
+              }
+            }
+          }
+        }
 
-	/* it wasn't there! */
-	if (d == 0) {
-	  /* it was a lie! handle the situation */
-	  rumor_handle_lie(&creatures[i].mem, r);
-	}
-	/* it's there ok! */
-	else {
-	  rumor_remove(&creatures[i].mem.rumor_list, r);
-	}
+        /* it wasn't there! */
+        if (d == 0) {
+          /* it was a lie! handle the situation */
+          rumor_handle_lie(&creatures[i].mem, r);
+        }
+        /* it's there ok! */
+        else {
+          rumor_remove(&creatures[i].mem.rumor_list, r);
+        }
       }
 
       new_state(&creatures[i].state, i);
@@ -364,49 +364,49 @@ int move_creatures(void) {
 
       r = creatures[i].mem.experience_list;
       while (r != NULL) {
-	if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
-	  break;
-	r = r->next;
+        if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
+          break;
+        r = r->next;
       }
       if (r == NULL) {
-	r = creatures[i].mem.rumor_list;
-	while (r != NULL) {
-	  if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
-	    break;
-	  r = r->next;
-	}
+        r = creatures[i].mem.rumor_list;
+        while (r != NULL) {
+          if (r->action == ACTION_SAW_TREASURE && (r->status & RUMOR_STATUS_TRUE) != 0)
+            break;
+          r = r->next;
+        }
       }
 
       d = 0;
 
       /* i knows about a treasure */
       if (r != NULL) {
-	m = r->x - creatures[i].x;
-	n = r->y - creatures[i].y;
+        m = r->x - creatures[i].x;
+        n = r->y - creatures[i].y;
 
-	if (abs(n)+abs(m) == 1) {
-	  creatures[i].state = CSTATE_LOOK_TREASURE;
-	  d = 1;
-	}
-	else {
-	/* move towards the treasure */
-	  if (m < 0)
-	    m = -1;
-	  else if (m > 0)
-	    m = 1;
-	  if (n < 0)
-	    n = -1;
-	  else if (n > 0)
-	    n = 1;
+        if (abs(n)+abs(m) == 1) {
+          creatures[i].state = CSTATE_LOOK_TREASURE;
+          d = 1;
+        }
+        else {
+          /* move towards the treasure */
+          if (m < 0)
+            m = -1;
+          else if (m > 0)
+            m = 1;
+          if (n < 0)
+            n = -1;
+          else if (n > 0)
+            n = 1;
 
-	  if (creature_move(&creatures[i], m, n) == FAILED) {
-	    new_state(&creatures[i].state, i);
-	    d = 1;
-	  }
-	}
+          if (creature_move(&creatures[i], m, n) == FAILED) {
+            new_state(&creatures[i].state, i);
+            d = 1;
+          }
+        }
       }
       if (d == 0)
-	new_state(&creatures[i].state, i);
+        new_state(&creatures[i].state, i);
     }
     /* find someone to talk with */
     else if (creatures[i].state == CSTATE_FIND_COMPANY) {
@@ -416,62 +416,62 @@ int move_creatures(void) {
       q = -1;
       l = 10000;
       for (d = 0; d < CREATURES; d++) {
-	if (d == i)
-	  continue;
-	e = creatures[i].x - creatures[d].x;
-	f = creatures[i].y - creatures[d].y;
+        if (d == i)
+          continue;
+        e = creatures[i].x - creatures[d].x;
+        f = creatures[i].y - creatures[d].y;
 
-	/* check out if i liked about d enough */
-	p = person_get(creatures[i].mem.person_list, creatures[d].mem.self);
-	if (p != NULL && p->respect < 0.5)
-	  continue;
+        /* check out if i liked about d enough */
+        p = person_get(creatures[i].mem.person_list, creatures[d].mem.self);
+        if (p != NULL && p->respect < 0.5)
+          continue;
 
-	e = sqrt(e*e + f*f);
-	if (e < l) {
-	  l = e;
-	  q = d;
-	}
+        e = sqrt(e*e + f*f);
+        if (e < l) {
+          l = e;
+          q = d;
+        }
       }
 
       if (q >= 0) {
-	m = creatures[q].x - creatures[i].x;
-	n = creatures[q].y - creatures[i].y;
+        m = creatures[q].x - creatures[i].x;
+        n = creatures[q].y - creatures[i].y;
 
-	if (abs(n)+abs(m) == 1) {
-	  /* does 5 hit instead? */
-	  if (i == 5) {
-	    if (rand() % 10 == 0)
-	      creatures[i].state = CSTATE_HIT;
-	    else {
-	      creatures[i].state = CSTATE_TALK;
-	      creatures[q].state = CSTATE_TALK;
-	    }
-	  }
-	  else {
-	    creatures[i].state = CSTATE_TALK;
-	    creatures[q].state = CSTATE_TALK;
-	  }
-	}
-	else if (l < 10) {
-	  /* move towards the nearest partner */
-	  if (m < 0)
-	    m = -1;
-	  else if (m > 0)
-	    m = 1;
-	  if (n < 0)
-	    n = -1;
-	  else if (n > 0)
-	    n = 1;
+        if (abs(n)+abs(m) == 1) {
+          /* does 5 hit instead? */
+          if (i == 5) {
+            if (rand() % 10 == 0)
+              creatures[i].state = CSTATE_HIT;
+            else {
+              creatures[i].state = CSTATE_TALK;
+              creatures[q].state = CSTATE_TALK;
+            }
+          }
+          else {
+            creatures[i].state = CSTATE_TALK;
+            creatures[q].state = CSTATE_TALK;
+          }
+        }
+        else if (l < 10) {
+          /* move towards the nearest partner */
+          if (m < 0)
+            m = -1;
+          else if (m > 0)
+            m = 1;
+          if (n < 0)
+            n = -1;
+          else if (n > 0)
+            n = 1;
 
-	  if (creature_move(&creatures[i], m, n) == FAILED) {
-	    new_state(&creatures[i].state, i);
-	  }
-	}
-	else
-	  new_state(&creatures[i].state, i);
+          if (creature_move(&creatures[i], m, n) == FAILED) {
+            new_state(&creatures[i].state, i);
+          }
+        }
+        else
+          new_state(&creatures[i].state, i);
       }
       else {
-	new_state(&creatures[i].state, i);
+        new_state(&creatures[i].state, i);
       }
     }
     /* blow a juicy fart */
@@ -491,46 +491,46 @@ int move_creatures(void) {
       l = 10000;
       /* locate closest food */
       for (m = 0; m < playfield_y; m++) {
-	for (n = 0; n < playfield_x; n++) {
-	  q = m*playfield_x + n;
-	  if (playfield[q] == 'f') {
-	    e = creatures[i].x - n;
-	    f = creatures[i].y - m;
-	    e = sqrt(e*e + f*f);
-	    if (e < l) {
-	      p = n;
-	      r = m;
-	      l = e;
-	    }
-	  }
-	}
+        for (n = 0; n < playfield_x; n++) {
+          q = m*playfield_x + n;
+          if (playfield[q] == 'f') {
+            e = creatures[i].x - n;
+            f = creatures[i].y - m;
+            e = sqrt(e*e + f*f);
+            if (e < l) {
+              p = n;
+              r = m;
+              l = e;
+            }
+          }
+        }
       }
 
       if (l < 10) {
-	m = r - creatures[i].y;
-	n = p - creatures[i].x;
+        m = r - creatures[i].y;
+        n = p - creatures[i].x;
 
-	if (abs(n)+abs(m) == 1) {
-	  creatures[i].state = CSTATE_EAT;
-	}
-	else {
-	  /* move towards the nearest food */
-	  if (m < 0)
-	    m = -1;
-	  else if (m > 0)
-	    m = 1;
-	  if (n < 0)
-	    n = -1;
-	  else if (n > 0)
-	    n = 1;
+        if (abs(n)+abs(m) == 1) {
+          creatures[i].state = CSTATE_EAT;
+        }
+        else {
+          /* move towards the nearest food */
+          if (m < 0)
+            m = -1;
+          else if (m > 0)
+            m = 1;
+          if (n < 0)
+            n = -1;
+          else if (n > 0)
+            n = 1;
 
-	  if (creature_move(&creatures[i], n, m) == FAILED) {
-	    new_state(&creatures[i].state, i);
-	  }
-	}
+          if (creature_move(&creatures[i], n, m) == FAILED) {
+            new_state(&creatures[i].state, i);
+          }
+        }
       }
       else {
-	new_state(&creatures[i].state, i);
+        new_state(&creatures[i].state, i);
       }
     }
     /* talk */
@@ -538,22 +538,22 @@ int move_creatures(void) {
       q = 0;
       l = 10000;
       for (d = 0; d < CREATURES; d++) {
-	if (d == i)
-	  continue;
-	e = creatures[i].x - creatures[d].x;
-	f = creatures[i].y - creatures[d].y;
-	e = sqrt(e*e + f*f);
-	if (e < l) {
-	  l = e;
-	  q = d;
-	}
+        if (d == i)
+          continue;
+        e = creatures[i].x - creatures[d].x;
+        f = creatures[i].y - creatures[d].y;
+        e = sqrt(e*e + f*f);
+        if (e < l) {
+          l = e;
+          q = d;
+        }
       }
 
       m = creatures[q].x - creatures[i].x;
       n = creatures[q].y - creatures[i].y;
 
       if (abs(n)+abs(m) == 1) {
-	rumor_tell(&creatures[i].mem, &creatures[q].mem);
+        rumor_tell(&creatures[i].mem, &creatures[q].mem);
       }
 
       new_state(&creatures[i].state, i);
@@ -563,13 +563,13 @@ int move_creatures(void) {
       
       n = creatures[i].y*playfield_x + creatures[i].x;
       if (playfield[n + 1] == 'f')
-	playfield[n + 1] = '.';
+        playfield[n + 1] = '.';
       else if (playfield[n - 1] == 'f')
-	playfield[n - 1] = '.';
+        playfield[n - 1] = '.';
       else if (playfield[n + playfield_x] == 'f')
-	playfield[n + playfield_x] = '.';
+        playfield[n + playfield_x] = '.';
       else if (playfield[n - playfield_x] == 'f')
-	playfield[n - playfield_x] = '.';
+        playfield[n - playfield_x] = '.';
 
       new_state(&creatures[i].state, i);
     }
@@ -696,32 +696,32 @@ int display_rumors(void) {
     r = creatures[i].mem.rumor_list;
     while (r != NULL) {
       if (r->action == ACTION_FART)
-	{
-	  r = r->next;
-	  continue;
-	}
+        {
+          r = r->next;
+          continue;
+        }
       /*
-	printf("%c farted ", creatures[r->subject].symbol);
+        printf("%c farted ", creatures[r->subject].symbol);
       */
 
       if ((r->status & RUMOR_STATUS_FALSE) != 0)
-	printf("F:");
+        printf("F:");
       if ((r->status & RUMOR_STATUS_TRUE) != 0)
-	printf("T:");
+        printf("T:");
 
       if (r->action == ACTION_HIT)
-	printf("%c hit %c ", creatures[r->subject.id].symbol, creatures[r->object.id].symbol);
+        printf("%c hit %c ", creatures[r->subject.id].symbol, creatures[r->object.id].symbol);
       if (r->action == ACTION_SALIVATE)
-	printf("%c salivated ", creatures[r->subject.id].symbol);
+        printf("%c salivated ", creatures[r->subject.id].symbol);
       if (r->action == ACTION_SAW_TREASURE)
-	printf("%c saw $ in (%d, %d) ", creatures[r->subject.id].symbol, (int)r->x, (int)r->y);
+        printf("%c saw $ in (%d, %d) ", creatures[r->subject.id].symbol, (int)r->x, (int)r->y);
 
       printf("%d ", r->timer);
 
       if ((r->status & RUMOR_STATUS_HEARD) != 0)
-	printf("(h:%d o:%d ", r->teller.id, r->original_teller.id);
+        printf("(h:%d o:%d ", r->teller.id, r->original_teller.id);
       if ((r->status & RUMOR_STATUS_SAW) != 0)
-	printf("(s:%d o:%d ", r->teller.id, r->original_teller.id);
+        printf("(s:%d o:%d ", r->teller.id, r->original_teller.id);
       printf("e: %f). ", r->effect_subject);
       r = r->next;
     }
@@ -734,29 +734,29 @@ int display_rumors(void) {
     r = creatures[i].mem.old_rumors_list;
     while (r != NULL) {
       if (r->action == ACTION_FART)
-	{
-	  r = r->next;
-	  continue;
-	}
+        {
+          r = r->next;
+          continue;
+        }
 
       if ((r->status & RUMOR_STATUS_FALSE) != 0)
-	printf("F:");
+        printf("F:");
       if ((r->status & RUMOR_STATUS_TRUE) != 0)
-	printf("T:");
+        printf("T:");
 
       if (r->action == ACTION_HIT)
-	printf("%c hit %c ", creatures[r->subject.id].symbol, creatures[r->object.id].symbol);
+        printf("%c hit %c ", creatures[r->subject.id].symbol, creatures[r->object.id].symbol);
       if (r->action == ACTION_SALIVATE)
-	printf("%c salivated ", creatures[r->subject.id].symbol);
+        printf("%c salivated ", creatures[r->subject.id].symbol);
       if (r->action == ACTION_SAW_TREASURE)
-	printf("%c saw $ in (%d, %d) ", creatures[r->subject.id].symbol, (int)r->x, (int)r->y);
+        printf("%c saw $ in (%d, %d) ", creatures[r->subject.id].symbol, (int)r->x, (int)r->y);
 
       printf("%d ", r->timer);
 
       if ((r->status & RUMOR_STATUS_HEARD) != 0)
-	printf("(h:%d o:%d). ", r->teller.id, r->original_teller.id);
+        printf("(h:%d o:%d). ", r->teller.id, r->original_teller.id);
       if ((r->status & RUMOR_STATUS_SAW) != 0)
-	printf("(s:%d o:%d). ", r->teller.id, r->original_teller.id);
+        printf("(s:%d o:%d). ", r->teller.id, r->original_teller.id);
       r = r->next;
     }
     printf("\n");
@@ -778,29 +778,29 @@ int display_experiences(void) {
     r = creatures[i].mem.experience_list;
     while (r != NULL) {
       if (r->action == ACTION_FART)
-	{
-	  r = r->next;
-	  continue;
-	}
+        {
+          r = r->next;
+          continue;
+        }
 
       if ((r->status & RUMOR_STATUS_FALSE) != 0)
-	printf("F:");
+        printf("F:");
       if ((r->status & RUMOR_STATUS_TRUE) != 0)
-	printf("T:");
+        printf("T:");
 
       if (r->action == ACTION_HIT)
-	printf("%c hit %c ", creatures[r->subject.id].symbol, creatures[r->object.id].symbol);
+        printf("%c hit %c ", creatures[r->subject.id].symbol, creatures[r->object.id].symbol);
       if (r->action == ACTION_SALIVATE)
-	printf("%c salivated ", creatures[r->subject.id].symbol);
+        printf("%c salivated ", creatures[r->subject.id].symbol);
       if (r->action == ACTION_SAW_TREASURE)
-	printf("%c saw $ in (%d, %d) ", creatures[r->subject.id].symbol, (int)r->x, (int)r->y);
+        printf("%c saw $ in (%d, %d) ", creatures[r->subject.id].symbol, (int)r->x, (int)r->y);
 
       printf("%d ", r->timer);
 
       if ((r->status & RUMOR_STATUS_HEARD) != 0)
-	printf("(h:%d o:%d). ", r->teller.id, r->original_teller.id);
+        printf("(h:%d o:%d). ", r->teller.id, r->original_teller.id);
       if ((r->status & RUMOR_STATUS_SAW) != 0)
-	printf("(s:%d o:%d). ", r->teller.id, r->original_teller.id);
+        printf("(s:%d o:%d). ", r->teller.id, r->original_teller.id);
       r = r->next;
     }
     printf("\n");
@@ -853,25 +853,25 @@ int rumor_generate(struct creature *c, struct creature *t, int ract) {
       x = sqrt(x*x + y*y);
       /* can the other person hear the fart? */
       if (x < 3) {
-	r = rumor_create();
-	r->subject.id = c->mem.self->id;
-	r->subject.race = c->mem.self->race;
-	r->object.id = t->mem.self->id;
-	r->object.race = t->mem.self->race;
-	r->action = ract;
-	r->priority = actions[r->action].priority;
-	r->original_teller.id = creatures[i].mem.self->id;
-	r->original_teller.race = creatures[i].mem.self->race;
-	r->teller.id = creatures[i].mem.self->id;
-	r->teller.race = creatures[i].mem.self->race;
-	r->timer = 100;
-	r->next = NULL;
-	r->status = RUMOR_STATUS_TRUE | RUMOR_STATUS_SAW;
-	r->x = 0;
-	r->y = 0;
-	if (c != &creatures[i])
-	  rumor_experience(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
-	rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
+        r = rumor_create();
+        r->subject.id = c->mem.self->id;
+        r->subject.race = c->mem.self->race;
+        r->object.id = t->mem.self->id;
+        r->object.race = t->mem.self->race;
+        r->action = ract;
+        r->priority = actions[r->action].priority;
+        r->original_teller.id = creatures[i].mem.self->id;
+        r->original_teller.race = creatures[i].mem.self->race;
+        r->teller.id = creatures[i].mem.self->id;
+        r->teller.race = creatures[i].mem.self->race;
+        r->timer = 100;
+        r->next = NULL;
+        r->status = RUMOR_STATUS_TRUE | RUMOR_STATUS_SAW;
+        r->x = 0;
+        r->y = 0;
+        if (c != &creatures[i])
+          rumor_experience(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
+        rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
       }
     }
     /* generate a salivate rumor */
@@ -881,25 +881,25 @@ int rumor_generate(struct creature *c, struct creature *t, int ract) {
       x = sqrt(x*x + y*y);
       /* can the other person see the saliva? */
       if (x < 2) {
-	r = rumor_create();
-	r->subject.id = c->mem.self->id;
-	r->subject.race = c->mem.self->race;
-	r->object.id = t->mem.self->id;
-	r->object.race = t->mem.self->race;
-	r->action = ract;
-	r->priority = actions[r->action].priority;
-	r->original_teller.id = creatures[i].mem.self->id;
-	r->original_teller.race = creatures[i].mem.self->race;
-	r->teller.id = creatures[i].mem.self->id;
-	r->teller.race = creatures[i].mem.self->race;
-	r->timer = 100;
-	r->next = NULL;
-	r->status = RUMOR_STATUS_TRUE | RUMOR_STATUS_SAW;
-	r->x = 0;
-	r->y = 0;
-	if (c != &creatures[i])
-	  rumor_experience(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
-	rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
+        r = rumor_create();
+        r->subject.id = c->mem.self->id;
+        r->subject.race = c->mem.self->race;
+        r->object.id = t->mem.self->id;
+        r->object.race = t->mem.self->race;
+        r->action = ract;
+        r->priority = actions[r->action].priority;
+        r->original_teller.id = creatures[i].mem.self->id;
+        r->original_teller.race = creatures[i].mem.self->race;
+        r->teller.id = creatures[i].mem.self->id;
+        r->teller.race = creatures[i].mem.self->race;
+        r->timer = 100;
+        r->next = NULL;
+        r->status = RUMOR_STATUS_TRUE | RUMOR_STATUS_SAW;
+        r->x = 0;
+        r->y = 0;
+        if (c != &creatures[i])
+          rumor_experience(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
+        rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
       }
     }
     /* generate a hit rumor */
@@ -909,30 +909,30 @@ int rumor_generate(struct creature *c, struct creature *t, int ract) {
       x = sqrt(x*x + y*y);
       /* can the other person see the beating? */
       if (x < 2) {
-	if (&creatures[i] == t) {
-	  person_check(&t->mem.person_list, c->mem.self);
-	  p = person_get(t->mem.person_list, c->mem.self);
-	  rumor_change_respect(&t->mem.rumor_list, p, -0.2);
-	}
-	r = rumor_create();
-	r->subject.id = c->mem.self->id;
-	r->subject.race = c->mem.self->race;
-	r->object.id = t->mem.self->id;
-	r->object.race = t->mem.self->race;
-	r->action = ract;
-	r->priority = actions[r->action].priority;
-	r->original_teller.id = creatures[i].mem.self->id;
-	r->original_teller.race = creatures[i].mem.self->race;
-	r->teller.id = creatures[i].mem.self->id;
-	r->teller.race = creatures[i].mem.self->race;
-	r->timer = 200;
-	r->next = NULL;
-	r->status = RUMOR_STATUS_TRUE | RUMOR_STATUS_SAW;
-	r->x = 0;
-	r->y = 0;
-	if (c != &creatures[i])
-	  rumor_experience(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
-	rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
+        if (&creatures[i] == t) {
+          person_check(&t->mem.person_list, c->mem.self);
+          p = person_get(t->mem.person_list, c->mem.self);
+          rumor_change_respect(&t->mem.rumor_list, p, -0.2);
+        }
+        r = rumor_create();
+        r->subject.id = c->mem.self->id;
+        r->subject.race = c->mem.self->race;
+        r->object.id = t->mem.self->id;
+        r->object.race = t->mem.self->race;
+        r->action = ract;
+        r->priority = actions[r->action].priority;
+        r->original_teller.id = creatures[i].mem.self->id;
+        r->original_teller.race = creatures[i].mem.self->race;
+        r->teller.id = creatures[i].mem.self->id;
+        r->teller.race = creatures[i].mem.self->race;
+        r->timer = 200;
+        r->next = NULL;
+        r->status = RUMOR_STATUS_TRUE | RUMOR_STATUS_SAW;
+        r->x = 0;
+        r->y = 0;
+        if (c != &creatures[i])
+          rumor_experience(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
+        rumor_add_with_checks(&creatures[i].mem.experience_list, &creatures[i].mem.person_list, r);
       }
     }
   }

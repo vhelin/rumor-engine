@@ -70,7 +70,7 @@ int item_load(struct level *l, FILE *f) {
       fscanf(f, "%255s", tmp);
 
       if (strcmp(tmp, "apple") == 0)
-	i->a = FOOD_TYPE_APPLE;
+        i->a = FOOD_TYPE_APPLE;
     }
   }
 

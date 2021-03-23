@@ -207,12 +207,12 @@ int ai_navigate_rat(struct level *l, struct ai *a) {
       c = ma->tiles[i];
 
       if (c == '.' || c == ' ' || c == '\'' || c == '<' || c == '>' || c == 0) {
-	/* achievable tiles */
-	l->modifier[i] = 1.0f;
+        /* achievable tiles */
+        l->modifier[i] = 1.0f;
       }
       else {
-	/* blocks */
-	l->modifier[i] = l->dx*l->dy;
+        /* blocks */
+        l->modifier[i] = l->dx*l->dy;
       }
     }
   }
@@ -224,7 +224,7 @@ int ai_navigate_rat(struct level *l, struct ai *a) {
       dy = y - a->my;
       dx = x - a->mx;
       if (dx*dx + dy*dy > r*r)
-	continue;
+        continue;
 
       i = y*l->dx + x;
       tmpa = ma->bots[i];
@@ -232,35 +232,35 @@ int ai_navigate_rat(struct level *l, struct ai *a) {
 
       /* ai bots */
       if (tmpa != NULL) {
-	/* one cannot walk through another bot */
-	l->modifier[i] += l->dx*l->dy;
-	if (tmpa->race != AI_RACE_RAT) {
-	  /* rats are afraid of everyone else */
-	  if (x > sx)
-	    l->modifier[i-1] += 4.0f;
-	  if (y > sy)
-	    l->modifier[i-l->dx] += 4.0f;
-	  if (x < ex-1)
-	    l->modifier[i+1] += 4.0f;
-	  if (y < ey-1)
-	    l->modifier[i+l->dx] += 4.0f;
-	}
+        /* one cannot walk through another bot */
+        l->modifier[i] += l->dx*l->dy;
+        if (tmpa->race != AI_RACE_RAT) {
+          /* rats are afraid of everyone else */
+          if (x > sx)
+            l->modifier[i-1] += 4.0f;
+          if (y > sy)
+            l->modifier[i-l->dx] += 4.0f;
+          if (x < ex-1)
+            l->modifier[i+1] += 4.0f;
+          if (y < ey-1)
+            l->modifier[i+l->dx] += 4.0f;
+        }
       }
       /* no ai bot -> check the items */
       else if (tmpi != NULL) {
-	/* the items */
-	while (tmpi != NULL) {
-	  if (tmpi->type == ITEM_TYPE_FOOD) {
-	    /* set a target */
-	    l->navigation[i] = 0.0f;
-	  }
-	  tmpi = tmpi->next;
-	}
+        /* the items */
+        while (tmpi != NULL) {
+          if (tmpi->type == ITEM_TYPE_FOOD) {
+            /* set a target */
+            l->navigation[i] = 0.0f;
+          }
+          tmpi = tmpi->next;
+        }
       }
       /* no items -> check the land type */
       else if (ma->tiles[i] == 0) {
-	/* uncharted waters! */
-	l->navigation[i] = 0.5f;
+        /* uncharted waters! */
+        l->navigation[i] = 0.5f;
       }
     }
   }
@@ -288,71 +288,71 @@ int ai_propagate(int dx, int sy, int ey, int sx, int ex, float *nav, float *mod)
     /* forward */
     for (y = sy; y < ey; y++) {
       for (x = sx; x < ex; x++) {
-	i = y*dx + x;
-	/* left */
-	if (x > sx && (nav[i-1]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i-1]+1)*mod[i];
-	  f = 0;
-	}
-	/* right */
-	if (x < ex-1 && (nav[i+1]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i+1]+1)*mod[i];
-	  f = 0;
-	}
-	/* up */
-	if (y > sy && (nav[i-dx]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i-dx]+1)*mod[i];
-	  f = 0;
-	}
-	/* down */
-	if (y < ey-1 && (nav[i+dx]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i+dx]+1)*mod[i];
-	  f = 0;
-	}
+        i = y*dx + x;
+        /* left */
+        if (x > sx && (nav[i-1]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i-1]+1)*mod[i];
+          f = 0;
+        }
+        /* right */
+        if (x < ex-1 && (nav[i+1]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i+1]+1)*mod[i];
+          f = 0;
+        }
+        /* up */
+        if (y > sy && (nav[i-dx]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i-dx]+1)*mod[i];
+          f = 0;
+        }
+        /* down */
+        if (y < ey-1 && (nav[i+dx]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i+dx]+1)*mod[i];
+          f = 0;
+        }
       }
     }
 
     /* backward */
     for (y = ey-1; y >= sy; y--) {
       for (x = ex-1; x >= sx; x--) {
-	i = y*dx + x;
-	/* left */
-	if (x > sx && (nav[i-1]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i-1]+1)*mod[i];
-	  f = 0;
-	}
-	/* right */
-	if (x < ex-1 && (nav[i+1]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i+1]+1)*mod[i];
-	  f = 0;
-	}
-	/* up */
-	if (y > sy && (nav[i-dx]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i-dx]+1)*mod[i];
-	  f = 0;
-	}
-	/* down */
-	if (y < ey-1 && (nav[i+dx]+1)*mod[i] < nav[i]) {
-	  nav[i] = (nav[i+dx]+1)*mod[i];
-	  f = 0;
-	}
+        i = y*dx + x;
+        /* left */
+        if (x > sx && (nav[i-1]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i-1]+1)*mod[i];
+          f = 0;
+        }
+        /* right */
+        if (x < ex-1 && (nav[i+1]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i+1]+1)*mod[i];
+          f = 0;
+        }
+        /* up */
+        if (y > sy && (nav[i-dx]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i-dx]+1)*mod[i];
+          f = 0;
+        }
+        /* down */
+        if (y < ey-1 && (nav[i+dx]+1)*mod[i] < nav[i]) {
+          nav[i] = (nav[i+dx]+1)*mod[i];
+          f = 0;
+        }
       }
     }
   }
 
   /*
-  {
+    {
     FILE *mos;
 
     mos = fopen("tmp.txt", "ab");
     for (y = sy; y < ey; y++) {
-      for (x = sx; x < ex; x++) {
-	fprintf(mos, "%5d ", (int)nav[y*dx + x]);
-      }
-      fprintf(mos, "\n");
+    for (x = sx; x < ex; x++) {
+    fprintf(mos, "%5d ", (int)nav[y*dx + x]);
+    }
+    fprintf(mos, "\n");
     }
     fclose(mos);
-  }
+    }
   */
 
   return SUCCEEDED;
@@ -441,8 +441,8 @@ int ai_live_rat(struct level *l, struct ai *a) {
 
       /* choose one from the best options */
       for (i = 1; i < 4; i++) {
-	if (di[i].cost > di[0].cost)
-	  break;
+        if (di[i].cost > di[0].cost)
+          break;
       }
 
       i = rand() % i;
@@ -474,8 +474,8 @@ int ai_live_rat(struct level *l, struct ai *a) {
 
       /* choose one from the best options */
       for (i = 1; i < 4; i++) {
-	if (di[i].cost > di[0].cost)
-	  break;
+        if (di[i].cost > di[0].cost)
+          break;
       }
 
       i = rand() % i;
@@ -500,7 +500,7 @@ int ai_live(struct level *l) {
     /* is this the ai's first visit to the current level? */
     if (a->maps[l->id] == NULL) {
       if (map_new(l->dx, l->dy, &a->maps[l->id]) == FAILED)
-	continue;
+        continue;
     }
 
     map_look(l, a->maps[l->id], a, 6);
@@ -733,7 +733,7 @@ int ai_operate(struct level *l, struct ai *a, int dir) {
     i = a->items;
     while (i != NULL) {
       if (i->type == ITEM_TYPE_KEY && i->a == x && i->b == y)
-	break;
+        break;
       i = i->next;
     }
 
@@ -753,7 +753,7 @@ int ai_operate(struct level *l, struct ai *a, int dir) {
     i = a->items;
     while (i != NULL) {
       if (i->type == ITEM_TYPE_KEY && i->a == x && i->b == y)
-	break;
+        break;
       i = i->next;
     }
 

@@ -10,7 +10,7 @@
 #include "rumor.h"
 
 /*
-#define RUMOR_DEBUG 1
+  #define RUMOR_DEBUG 1
 */
 
 /* the action table */
@@ -21,8 +21,8 @@ static struct action *actions = NULL;
 static void _rumor_debug_print_rumor(FILE *f, struct rumor *r) {
 
   fprintf(f, "PRI: %f SUB: %d OBJ: %d ACT: %d TEL: %d ORG: %d TIM: %d STA: %d X: %f Y: %f esu: %f eob: %f ete: %f eor: %f ID: %d\n",
-	  r->priority, r->subject.id, r->object.id, r->action, r->teller.id, r->original_teller.id, r->timer,
-	  r->status, r->x, r->y, r->effect_subject, r->effect_object, r->effect_teller, r->effect_original_teller, r->id);
+          r->priority, r->subject.id, r->object.id, r->action, r->teller.id, r->original_teller.id, r->timer,
+          r->status, r->x, r->y, r->effect_subject, r->effect_object, r->effect_teller, r->effect_original_teller, r->id);
 }
 #endif
 
@@ -432,10 +432,10 @@ int rumor_decay(struct rumor **l) {
     /* forget the rumor? */
     if (rc->timer == 0) {
       if (rp == NULL) {
-	*l = rc->next;
+        *l = rc->next;
       }
       else {
-	rp->next = rc->next;
+        rp->next = rc->next;
       }
       rt = rc->next;
       rumor_free(rc);
@@ -463,10 +463,10 @@ int rumor_filter(struct rumor **l, int id) {
     /* forget the rumor? */
     if (rc->teller.id == id) {
       if (rp == NULL) {
-	*l = rc->next;
+        *l = rc->next;
       }
       else {
-	rp->next = rc->next;
+        rp->next = rc->next;
       }
       rt = rc->next;
       rumor_free(rc);
@@ -504,9 +504,9 @@ int rumor_remove(struct rumor **l, struct rumor *r) {
     /* forget the rumor? */
     if (rc == r) {
       if (rp == NULL)
-	*l = rc->next;
+        *l = rc->next;
       else
-	rp->next = rc->next;
+        rp->next = rc->next;
       rt = rc->next;
       rumor_free(rc);
       rc = rt;
@@ -534,11 +534,11 @@ int rumor_remove_all(struct rumor **l, struct rumor *r) {
   while (rc != NULL) {
     /* forget the rumor? */
     if (rc->x == r->x && rc->y && r->y && rc->subject.id == r->subject.id && rc->object.id == r->object.id &&
-	rc->action == r->action) {
+        rc->action == r->action) {
       if (rp == NULL)
-	*l = rc->next;
+        *l = rc->next;
       else
-	rp->next = rc->next;
+        rp->next = rc->next;
       rt = rc->next;
       rumor_free(rc);
       rc = rt;
@@ -705,13 +705,13 @@ int rumor_handle_clash(struct rumor **l, struct person **p, struct rumor *r) {
 
 
 #ifdef RUMOR_DEBUG
- {
-   FILE *g;
-   g = fopen("debug", "ab");
-   fprintf(g, "RUMOR_HANDLE_CLASH:\n");
-   fflush(g);
-   fclose(g);
- }
+  {
+    FILE *g;
+    g = fopen("debug", "ab");
+    fprintf(g, "RUMOR_HANDLE_CLASH:\n");
+    fflush(g);
+    fclose(g);
+  }
 #endif
 
   e = rumor_get_duplicate(*l, r);
@@ -857,9 +857,9 @@ int rumor_find_clone(struct rumor *l, struct rumor *r) {
 
   while (l != NULL) {
     if (l->subject.id == r->subject.id && l->object.id == r->object.id &&
-	l->action == r->action && l->teller.id == r->teller.id &&
-	l->original_teller.id == r->original_teller.id && l->status == r->status &&
-	l->x == r->x && l->y == r->y) {
+        l->action == r->action && l->teller.id == r->teller.id &&
+        l->original_teller.id == r->original_teller.id && l->status == r->status &&
+        l->x == r->x && l->y == r->y) {
       return SUCCEEDED;
     }
     l = l->next;

@@ -84,13 +84,13 @@ int main(int argc, char *argv[]) {
       c = getch();
 
       if (c == KEY_UP)
-	ai_operate(l, ai_player, AI_DIRECTION_UP);
+        ai_operate(l, ai_player, AI_DIRECTION_UP);
       else if (c == KEY_DOWN)
-	ai_operate(l, ai_player, AI_DIRECTION_DOWN);
+        ai_operate(l, ai_player, AI_DIRECTION_DOWN);
       else if (c == KEY_LEFT)
-	ai_operate(l, ai_player, AI_DIRECTION_LEFT);
+        ai_operate(l, ai_player, AI_DIRECTION_LEFT);
       else if (c == KEY_RIGHT)
-	ai_operate(l, ai_player, AI_DIRECTION_RIGHT);
+        ai_operate(l, ai_player, AI_DIRECTION_RIGHT);
     }
     /* MOVE? */
     else if (c == KEY_UP) {

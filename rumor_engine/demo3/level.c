@@ -190,11 +190,11 @@ int level_display(struct level *l, int x, int y, int dx, int dy) {
     for (bx = ax; bx <= ex; bx++, i++) {
       m = l->items[by*l->dx + bx];
       if (m == NULL)
-	continue;
+        continue;
       if (m->type == ITEM_TYPE_KEY)
-	level_view[i] = '(';
+        level_view[i] = '(';
       else if (m->type == ITEM_TYPE_FOOD)
-	level_view[i] = '%';
+        level_view[i] = '%';
     }
   }
 
@@ -203,16 +203,16 @@ int level_display(struct level *l, int x, int y, int dx, int dy) {
     for (bx = ax; bx <= ex; bx++, i++) {
       a = l->bots[by*l->dx + bx];
       if (a == NULL)
-	continue;
+        continue;
 
       if (a->mem.self->race == AI_RACE_HUMAN)
-	level_view[i] = '@';
+        level_view[i] = '@';
       else if (a->mem.self->race == AI_RACE_ORC)
-	level_view[i] = 'o';
+        level_view[i] = 'o';
       else if (a->mem.self->race == AI_RACE_CAT)
-	level_view[i] = 'f';
+        level_view[i] = 'f';
       else if (a->mem.self->race == AI_RACE_RAT)
-	level_view[i] = 'r';
+        level_view[i] = 'r';
 
 
       /* update the on screen coordinates */
@@ -226,11 +226,11 @@ int level_display(struct level *l, int x, int y, int dx, int dy) {
     for (i = 0, bx = 0; bx < dx; bx++) {
       /* print the food symbol correctly */
       if (level_view[by*dx + bx] == '%') {
-	tmp[i++] = '%';
-	tmp[i++] = '%';
+        tmp[i++] = '%';
+        tmp[i++] = '%';
       }
       else
-	tmp[i++] = level_view[by*dx + bx];
+        tmp[i++] = level_view[by*dx + bx];
     }
     tmp[i] = 0;
     strcat(tmp, "\n");
